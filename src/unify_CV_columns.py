@@ -16,7 +16,9 @@ def unify_columns(data, text_in_column, new_column_name, expected_items=1,
 
     keys = data.keys()
 
-    cols_informes = [c for c in keys if text_in_column.lower() in c.lower()]
+    miss_sess = []
+
+    colums_names = [c for c in keys if text_in_column.lower() in c.lower()]
 
     cols = data[keys[0]]
     new_values = np.zeros_like(cols)
@@ -24,6 +26,8 @@ def unify_columns(data, text_in_column, new_column_name, expected_items=1,
 
     for idx, alumne in data.iterrows():
         vals = []
+        sess = []
+        missing = []
         grup = ""
         for column in colums_names:
             value = alumne[column]
@@ -32,6 +36,8 @@ def unify_columns(data, text_in_column, new_column_name, expected_items=1,
                 if grup_col is not None and not grup:
                     match = regex.search("M1A|M1B|M2A|M2B|T1A|T1B", column)
                     grup = match.group() if match else ""
+                matchS = regex.search(r"Sessió\s+(\d+)\s+", column)
+                sess.append(int(matchS.group(1)) if matchS else "")
 
         if grup_col is not None:
             grup_col[idx] = grup
@@ -46,14 +52,22 @@ def unify_columns(data, text_in_column, new_column_name, expected_items=1,
                 new_values[idx] = vals[0]  # take the first
             else:
                 new_values[idx] = -1*abs(num_vals-expected_items)  # set an error code
+                if expected_items > 1 :
+                    missing = [str(s) for s in range(1, expected_items+1) if s not in sess]
+        
+        miss_sess.append(','.join(missing))
+
 
     if grup_col is not None:
         data[grup_str] = grup_col
         
-    data[new_col_name] = new_values
+    data[new_column_name] = new_values
 
     if delete:
         data = data.drop(columns=colums_names)
+
+    if expected_items > 1:
+        data["Missing sessions"] = miss_sess
 
     return data
 
@@ -78,6 +92,7 @@ def unify_oral(data):
 def reformating(data):
     """ Long names are not usefull
     """
+    keys = data.keys()
     renaming_olds = [c for c in keys if "continuada" in c.lower()]
     renaming_news = [c.replace("Avaluació Continuada",
                                "AC").replace("Tasca:", 
