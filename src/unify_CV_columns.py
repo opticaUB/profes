@@ -9,30 +9,30 @@ import regex
 
 from statistics import mean
 
-UNIFIED_SUFFIX = "_unified"
-GRUP_LAB = "gLab."
-GRUP_TEO = "gTeo."
+UNIFIED_SUFFIX = "_unified"  # Final filename's suffix
+GRUP_LAB = "gLab."  # Column name for the Laboraty group
+GRUP_TEO = "gTeo."  # Column name for the Theory group
 
-ORAL_NEW = "Oral"
-ORAL_PATTERN = "prova oral"
-ORAL_EXPECTED = 1
+ORAL_NEW = "Oral"  # New column name for Oral Exam
+ORAL_PATTERN = "prova oral"  # substring to be contained in expected oral columns
+ORAL_EXPECTED = 1  # Final expected marks
 
-INFORMES_NEW = "Informes"
-INFORMES_PATTERN = "entrega informes"
-INFORMES_EXPECTED = 7
+INFORMES_NEW = "Informes"  # New column name for Averaged reports
+INFORMES_PATTERN = "entrega informes"  # substring to be contained in expected reports columns
+INFORMES_EXPECTED = 7  # Final expected marks to be able to make the average
 
-MISSING_SESSIONS = "Missing sessions"
+MISSING_SESSIONS = "Missing sessions"  # column name for the missing sessions
 
-POSSIBLE_GRUPS_LAB = "M1A|M1B|M2A|M2B|T1A|T1B"
-GRUPS_TEO = ['Q2_M1', 'Q2_M2', 'Q2_T1', 'Q1_T1']
-Q1T1_LABEL = 'ReAv.'
-SESSION_PATTERN = r"Sessió\s+(\d+)\s+"
-GRUPS_LABEL_CV = 'Grups'
-NIUB = 'Número ID'
+POSSIBLE_GRUPS_LAB = "M1A|M1B|M2A|M2B|T1A|T1B"  # regex pattern for possible teo groups
+GRUPS_TEO = ['Q2_M1', 'Q2_M2', 'Q2_T1', 'Q1_T1']  # possibles grups teorics
+Q1T1_LABEL = 'ReAv.'  # Nom del grup de tardor
+SESSION_PATTERN = r"Sessió\s+(\d+)\s+"  # regex pattern to look for session number
+GRUPS_LABEL_CV = 'Grups'  # Column name for grups in participants Excel
+NIUB = 'Número ID'  # ID column name
 
-FINAL_KEYS = ['Nom', 'Cognoms', NIUB, 
+FINAL_KEYS = ['Nom', 'Cognoms', NIUB,  # Desired columns in the final file
               ORAL_NEW, INFORMES_NEW, MISSING_SESSIONS, 
-              GRUP_TEO, GRUP_LAB]
+              GRUP_TEO, GRUP_LAB]  
 
 def load_main(pattern):
     fn_not_exists = True
